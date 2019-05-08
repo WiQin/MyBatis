@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mappers.StudentMapper是我们定义接口的全限定名字 这样就可以使用接口调用映射的SQL语句了 这个名字一定要和接口对应上-->
+<mapper namespace="mappers.StudentMapper">
+
+    <resultMap type="Student" id="StudentResult">
+        <id property="studId" column="stud_id" />
+        <result property="name" column="name" />
+        <result property="email" column="email" />
+        <result property="dob" column="dob" />
+    </resultMap>
+
+    <!--resultMap为结果集映射 -->
+    <select id="findAllStudents" resultMap="StudentResult">
+					SELECT * FROM STUDENTS
+				</select>
+
+    <!-- 列名和属性名字不一致可以给查询的列起一个别名 -->
+    <select id="findStudentById" parameterType="int" resultType="Student">
+					SELECT STUD_ID AS STUDID,NAME,EMAIL,DOB
+					FROM STUDENTS
+					WHERE
+					STUD_ID=#{id}
+				</select>
+
+    <insert id="insertStudent" parameterType="Student">
+					INSERT INTO
+					STUDENTS(STUD_ID,NAME,EMAIL,DOB)
+					VALUES(#{studId},#{name},#{email},#{dob})
+				</insert>
+
+    <!--更新 -->
+    <update id="updateStudent" parameterType="Student">
+                  update students set
+                  name = #{name},email = #{email},dob = #{dob}
+                  where stud_id = #{studId}
+    </update>
+
+    <!--删除 -->
+    <delete id="deleteStudentById" parameterType="int">
+        delete from students
+        where stud_id = #{id}
+    </delete>
+
+    <!--添加：phoneNumber-->
+    <insert id="insertStudentType" parameterType="Student">
+        insert into students(stud_id,name,email,dob,phone)
+        values(#{studId},#{name},#{email},#{dob},#{phone})
+    </insert>
+
+    <!--查找：phoneNumber-->
+    <select id="selectStudentByID_Type" parameterType="int" resultType="Student">
+        SELECT STUD_ID AS STUDID,NAME,EMAIL,DOB,PHONE
+					FROM STUDENTS
+					WHERE
+					STUD_ID=#{studId}
+    </select>
+
+</mapper>

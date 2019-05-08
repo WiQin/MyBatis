@@ -1,0 +1,460 @@
+
+mybatis:
+
+corejava
+ooad
+xml
+oracle
+jdbc--mybatis（jdbc封装，框架）
+web项目中的客户端技术：
+html/css/js/jquery
+web项目中的服务端技术：
+servlet/jsp
+mybatis
+spring/springmvc
+
+javaEE,web项目
+三层架构  B/S
+
+1.mybatis（4-5）
+框架：封装了jdbc
+jdbc：
+和数据库进行交互（增删改查）
+6大步骤：
+1.注册驱动
+2.获取连接
+3.获取statement对象
+4.执行sql语句
+5.如果有结果集，处理之
+6.关闭资源。
+
+jdbc的封装：
+ConnectionFactory
+Connection:步骤固定的
+Statement(sql)
+PreparedStatement(sql,obj)
+
+students(stud_id,name,email,dob)
+studId,name,email,dob
+//创建一个对象
+Student s = new Student(1,"",,,);
+//工具类，调用save(对象)，对象保存到对应的数据表中去
+ORMUtil util = new ORMUtil();
+util.save(s);
+
+信息：insert into tableName(colNames) values(??s);
+1.哪种类型-- 对应哪张表
+2.属性    -- 字段
+配置xml
+
+
+----------------------------
+jdbc--封装--ORM---ORM框架(hibernate,mybatis)
+简化，
+hibernate（sql语句自动生成，笨重）
+mybatis（sql语句由自己编写，灵活）轻量级
+ORM:对象关系映射Object relational mapping
+面对对象的  关系型数据库
+程序中的对象自动持久化到关系型数据库中
+	通过映射
+	一个持久化类--一张关系型数据库中的表
+	类中的每个属性--表中的每个字段
+	类的实例--表中的一条/行 记录
+
+持久化层：数据库交互相关
+Mapper:映射器
+
+mybatis：
+1.jar(mybatis的核心功能)
+2.配置文件(类型别名，数据库连接信息等,映射文件)
+3.映射文件(要执行的sql语句的列表，标签中,
+		   id属性)
+4.映射接口(要执行的各个方法，方法名对应映射文件标签中的id值)
+5.SqlSession:动态生成映射接口的实现类对象。
+  SqlSessionFactory
+
+
+mybatis:
+1.mybatis的入门/概述
+
+2.mybatis的配置文件的配置和使用
+
+3.mybatis的映射文件的配置和使用/映射接口
+	映射文件:要执行的sql语句的列表
+			  在标签( id=   || )中
+	映射接口:要执行的方法名==||
+
+4.单表中的配置和使用
+	增删改查
+5.多表的配置和使用
+	1:1  1:n  n:m
+6.mybatis的动态sql的配置和使用
+
+
+select * from student
+where 条件1 and 条件2 and 条件3 and 条件4
+
+
+-----------------
+mybatis的功能insert:
+1.jar(mybatis的核心功能)
+2.配置文件(数据库连接的4个信息)
+	mybatis-config.xml
+	----映射文件
+3.映射文件:mapper
+	(列出来要执行的所有sql语句:标签)
+	StduentMapper.xml   :Student
+	StudentMapper.java{
+		void insertStudent(Student s);
+	}
+	<mapper namespace="映射接口的全类名">
+		<insert id="映射接口中的方法名" parameterType="Stuent的全类名">
+		insert into students(stud_id,name)
+		values(#{studId},#{name});
+		</insert>
+	</mapper>
+4.映射接口，持久化类
+5.测试：SqlSession
+  1.读取mybatis-config.xml
+  2.创建sqlSessionFactory工厂对象
+  3.获取SqlSession对象
+  4.动态获取映射接口的实现类对象
+  StudentMapper mapper =
+ 	sqlSession.getMapper(StudentMapper.class);
+  5.执行实现类(接口(映射文件))中的方法
+  mapper.insertStudent(new Student(,,));
+  6.提交事务
+  sqlSession.commit;
+
+程序中的对象  持久化  数据库
+数据库   查到--创建初始化  对象
+#{studId}
+
+getStudId();
+Student{
+	private Integer studId;//attribute
+
+	get/setter ;//property
+}
+
+attribute
+property
+
+
+mybatis的配置详解
+
+<environments default="数据库1">
+	<environment id="数据库1">
+		1.连接数据库的4个信息
+		driver url username password
+		dataSource--property
+		 --type:数据源连接池:分配，管理，释放
+		2.事务管理的方式
+		transactionManager
+	</environment>
+	<environment id="数据库2">
+		1.连接数据库的4个信息
+		2.事务管理的方式
+	</environment>
+	<environment id="数据库3">
+		1.连接数据库的4个信息
+		2.事务管理的方式
+	</environment>
+	<environment id="数据库4">
+		1.连接数据库的4个信息
+		2.事务管理的方式
+	</environment>
+</environments>
+
+//默认的环境 default
+SqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+
+//统计明细的环境 cart
+SqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream, "shoppingcart");
+
+//统计报表的环境 report
+SqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream, "reports");
+
+The content of element type "configuration" must match
+ "(properties?,settings?,typeAliases?,typeHandlers?,objectFactory?,objectWrapperFactory?,plugins?,environments?,databaseIdProvider?,mappers?)".
+
+-----------------------
+mybatis测试:增删改查       java,sql
+
+配置文件:mybatis读取配置文件，生成SqlSessionFactory工厂对象---SqlSession
+environments:数据库连接
+transactionManager:事务管理方式(JDBC)
+dataSource:数据源(连接池)
+properties:声明变量,读取properties文件
+typeAliases：类型起别名:映射文件中
+			 参数类型:para..Type 返回数据类型:res..Type
+typeHandlers:自定义的类型处理器
+			生成sql:ps.set???(parameter???)
+			返回结果集:???Type (一个字段的值)
+settings元素: 全局参数设置
+mappers元素: SQL映射,指定映射文件路径
+
+映射文件：insert delete update
+ select:结果集映射(单表，多表(1:1,1:n,n:n)),resultMap
+
+
+
+--------------------------------------
+
+mybatis:
+1.概述（持久层/dao层/数据访问层框架），jdbc
+程序中的对象     持久化    关系型数据库
+数据库中的数据	 查询封装  程序中的对象
+--与数据库交互相关。
+2.配置文件--SqlSessionFactory
+3.映射文件/接口
+4.SqlSessionFactory---SqlSession--映射接口的实现类对象
+
+映射文件详解：
+insert:添加
+delete
+update
+select:多种查询
+resultMap:结果集的封装
+--单表的配置操作，多表(1:1,1:n,n:m)的配置操作
+student,PhoneNumber   students
+--多表的配置和操作
+
+
+数据库中的表：1:1,1:n,n:n
+
+1:1
+select
+3中结果集封装
+1.resultMap的基本映射
+<resulyMap type="Student">
+	<result property="address.state" column="state">
+</resulyMap>
+2.嵌套结果
+	<resulyMap>
+		...
+		对象的关联
+		<association keyProperty="address" resultMap="addressResult">
+		...
+	</resulyMap>
+	<resulyMap id="addressResult">
+		.....
+	</resulyMap>
+3.嵌套查询
+<resulyMap type="Student">
+		...
+		对象的关联
+		<association keyProperty="address" column="add_id" select="findAddressById">
+		...
+</resulyMap>
+	<select id="findAddressById" parameterType="int"
+	resultMap/Type="Address">
+
+	</select>
+
+增删改：先后顺序
+
+
+
+1:n
+
+
+------------------
+
+<insert para="Student">
+<selectKey keyProperty="studId" result="int" order="BEFORE"> :ID
+	</selectKey>
+	insert into()  values(#{addrss.})
+	</insert>
+findStudentById   resultMap--student
+findAllStudents   resultMap--List<student>
+
+	<resultMap type="Student">
+		<result property="addrss." column="">
+		<assioction property="address">
+		<assioction property="address" resultMap="">
+		<assioction property="address" column="" select="">
+		<collection property="courses">
+		<collection property="courses" resultMap="">
+		<collection property="courses" column="" select="">
+	</resultMap>
+----------------------------------------
+n:m
+
+
+    STUD_ID NAME    EMAIL           DOB            PHONE
+---------- ------- --------------- -------------- ---------------
+         4 ls      ls@briup.com    01-12月-17     100-101-102
+map:HashMap
+  key:字段名   value：字段值
+
+
+
+   STUD_ID NAME    EMAIL           DOB            PHONE
+---------- ------- --------------- -------------- -----------
+         4 ls      ls@briup.com    01-12月-17     100-101-102
+         5 tom5    5@briup.com     04-12月-17     100-110-101
+         3 tom3    333@briup.com   01-12月-17
+         6 tom5    5@briup.com     04-12月-17     100-110-101
+         7 tom5    5@briup.com     04-12月-17     100-110-101
+         8 tom5    5@briup.com     04-12月-17     100-110-101
+
+List{
+	map{
+		key:第一条数据的第1个列，v:值
+		key:第一条数据的第2个列，v:值
+		...
+	}
+	map2{
+
+
+	}
+}
+
+--------------------------------------------------------
+
+映射文件:
+resultMap
+insert delete update
+select
+单表，Student findStudentById
+		Map<String,Object>
+	select resuleType="Student"
+	  List<Student> findAllStudents
+	  Set<>
+	  SortedSet<>
+	  List<Map<String,Object>>
+	  List<String>
+	  int
+	select resuleType="Student"
+多表，
+1:1
+Student findStudentByIdwithAddress
+	1.resultMap映射
+	<result property="address.addrId" column="addr_id">
+	<result property="address.city" column="city">
+	2.嵌套结果(一句查询查处了所有的数据)
+	<resultMap type="Student" id="">
+		.....
+		<!--关联一个对象-->
+		<assoication property="address" resultMap="addressResult">
+	</resultMap>
+	3.嵌套查询(1主查询：所有的信息?10条N学生信息
+
+	findStudent  addr_id)
+	1+N
+	<resultMap type="Student" id="">
+		.....
+		<!--关联一个对象-->
+		<assoication property="address" column="addr_id" select="findAddressById">
+	</resultMap>
+1:n
+	嵌套结果
+	<collection property="courses" resultMap="addressResult">
+	嵌套查询
+	<collection property="courses" column="addr_id" select="">
+1:1
+1:n
+n:m
+结果集封装  association collection
+学生     n:m        课程
+1					1
+2					2
+3					3
+     学生选课表
+      s_id  c_id
+      1	 	 1
+      1		 2
+      2		 2
+
+mybatis:
+1.myabtis的入门/概述
+2.myabtis基本操作(配置，效果)
+3.mybatis的配置文件
+4.mybatis的映射文件(insert delete update select resultMap)
+5.单表配置和使用
+6.多表的配置和使用,R 1:1,1:n,n:m
+7.动态sql
+
+
+8.mybatis特殊功能
+9.mybatis注解
+xml:映射文件
+@注解,映射接口的方法名
+
+
+
+select *
+from student
+where 条件1
+and
+条件2
+and
+条件3
+and
+条件4
+
+sql拼接
+
+1.if:拼接sql片段
+<if test="true/false">
+	and/or 条件1
+</if>
+SELECT * FROM COURSES
+WHERE TUTOR_ID= ?
+
+SELECT * FROM COURSES
+WHERE TUTOR_ID= ?
+AND
+NAME LIKE ?
+AND
+START_DATE >= ?
+
+SELECT * FROM COURSES
+WHERE TUTOR_ID= ?
+AND NAME LIKE ? AND START_DATE >= ? AND END_DATE <= ?
+
+2.choose
+
+select * from courses
+where tutor_id = 2
+
+
+
+-------------------------------------
+
+1.myabtis的入门/概述--持久层框架
+2.myabtis基本操作(配置，效果)
+3.mybatis的配置文件
+4.mybatis的映射文件(insert delete update select resultMap)
+5.单表配置和使用
+6.多表的配置和使用,R 1:1,1:n,n:m
+	结果集:resultMap
+7.动态sql: 拼接sql
+8.mybatis特殊功能
+
+9.mybatis注解(xml--@)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

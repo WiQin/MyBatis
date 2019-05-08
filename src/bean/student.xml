@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class class = "bean.Student" table = "students">
+    <property name = "studId" column = "stud_id">
+    </property>
+    <property name = "name" column = "name">
+    </property>
+    <property name = "email" column = "email">
+    </property>
+    <property name = "dob" column = "dob">
+    </property>
+</class>

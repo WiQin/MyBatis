@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <properties resource="mybatis.properties">
+        <!-- properties文件优先级更高 -->
+        <property name="driver" value="oracle.jdbc.driver.OracleDriver" />
+        <property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:ORCL" />
+        <property name="user" value="wangyw" />
+        <property name="passwd" value="wangyw" />
+    </properties>
+
+    <!-- 起别名，忽略大小写
+    package:给指定包下所有类起别名-->
+    <typeAliases>
+        <!--<typeAlias type="bean.Student" alias="Student" />-->
+        <package name="bean" />
+    </typeAliases>
+
+    <!--自定义雷子那个处理器-->
+    <typeHandlers>
+        <typeHandler handler="typeHandlers.PhoneNumberHandler" />
+    </typeHandlers>
+    
+    <!-- 数据库连接信息 -->
+    <environments default="development">
+        <!-- 连接数据库的信息  事务管理的方式  可有多个，用于切换不同数据库 -->
+        <environment id="development">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${user}"/>
+                <property name="password" value="${passwd}"/>
+                <!--<property name="driver" value="oracle.jdbc.driver.OracleDriver" />
+                <property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:ORCL" />
+                <property name="username" value="wangyw" />
+                <property name="password" value="wangyw" />-->
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <mapper resource="mappers/StudentMapper.xml"/>
+    </mappers>
+
+</configuration>
